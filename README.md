@@ -175,6 +175,7 @@ flowchart TD
 
 <!--- WIRING DIAGRAM --->
 ## Wiring Diagram
+<img src="https://raw.githubusercontent.com/harsadella/harsadella_assets/main/WhatsApp%20Image%202026-04-20%20at%2015.00.57.jpeg" width="500"/>
 
 | Component   | ESP32 Pin | Connection Details              |
 |------------|----------|---------------------------------|
@@ -223,4 +224,193 @@ flowchart TD
 
 ### Mode Behavior Summary
 - Automatic Mode → LDR controls LED 1 and Servo  
-- Manual Mode → User controls all devices via Telegram  
+- Manual Mode → User controls all devices via Telegram
+
+<!--- TELEGRAM BOT COMMANDS --->
+## Telegram Bot Commands
+
+### System Control
+| Command      | Description                      |
+|--------------|----------------------------------|
+| /start       | Initialize system & choose mode  |
+| Manual       | Activate manual mode             |
+| Automatic    | Activate automatic mode          |
+
+### LED Control
+| Command      | Description            |
+|--------------|------------------------|
+| /LED1_ON     | Turn ON LED 1          |
+| /LED1_OFF    | Turn OFF LED 1         |
+| /LED2_ON     | Turn ON LED 2          |
+| /LED2_OFF    | Turn OFF LED 2         |
+| /LED3_ON     | Turn ON LED 3          |
+| /LED3_OFF    | Turn OFF LED 3         |
+
+
+### Window Control (Servo)
+| Command        | Description               |
+|----------------|---------------------------|
+| /open_window   | Open window (90°)         |
+| /close_window  | Close window (0°)         |
+
+
+### Sensor Monitoring
+| Command               | Description                  |
+|------------------------|------------------------------|
+| /check_temperature     | Get current temperature      |
+| /check_humidity        | Get current humidity         |
+
+
+> Notes
+> In **Automatic Mode**:
+> - LED 1 and window are controlled automatically by LDR  
+> - LED 2 and LED 3 can still be controlled manually  
+
+> In **Manual Mode**:
+> - All components are fully controlled via Telegram
+
+<!--- SETUP / INSTALLATION GUIDE --->
+## Setup / Installation Guide
+
+### 1. Hardware Setup
+- Connect all components based on the wiring diagram  
+- Ensure all GND are connected (common ground)  
+- Power ESP32 via USB  
+- Use external 5V supply for servo (recommended)  
+
+### 2. Software Requirements
+Install the following in Arduino IDE:
+- ESP32 Board Package  
+- Libraries:
+  - WiFi.h  
+  - WiFiClientSecure.h  
+  - UniversalTelegramBot  
+  - ArduinoJson  
+  - ESP32Servo  
+  - DHT sensor library  
+  - TM1637Display  
+
+### 3. Create Telegram Bot
+
+#### Step 1: Open BotFather
+- Open Telegram  
+- Search: **@BotFather**  
+- Click **Start**
+
+#### Step 2: Create New Bot
+- Send command:
+```
+/newbot
+```
+- Enter bot name (example: Smart Home Bot)  
+- Enter username (must end with `bot`, example: smarthome_iot_bot)  
+
+#### Step 3: Get Bot Token
+- BotFather will give you a **BOT TOKEN**
+- Example:
+```
+123456789:ABCdefGhIJKlmNoPQRstuVWxyz
+```
+- Copy this token
+
+### 4. Get Your Chat ID
+
+#### Method:
+1. Open Telegram  
+2. Search your bot username  
+3. Click **Start**  
+4. Send any message (e.g., "hello")  
+
+Then open this URL in browser:
+```
+https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
+```
+
+Example:
+```
+https://api.telegram.org/bot123456789:ABC/getUpdates
+```
+
+5. Find `"chat":{"id":XXXXXXXX}`  
+6. Copy the **chat ID**
+
+### 5. Configure Code
+
+Edit these lines in your code:
+
+```cpp
+#define WIFI_SSID     "YOUR_WIFI_NAME"
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+#define BOT_TOKEN     "YOUR_BOT_TOKEN"
+```
+
+(Optional: use Chat ID filtering for security)
+
+### 6. Upload Code
+- Select board: **ESP32 Dev Module**  
+- Select correct COM port  
+- Upload code to ESP32  
+
+### 7. Run System
+- Open Serial Monitor (115200 baud)  
+- Wait until WiFi connected  
+- Open Telegram bot  
+- Send:
+```
+/start
+```
+- Choose mode: **Manual** or **Automatic**
+
+### 8. Test Commands
+- Try:
+  - /LED1_ON  
+  - /open_window  
+  - /check_temperature  
+
+System should respond and execute commands in real time
+
+<!--- RESULT / OUTPUT --->
+## Results / Output
+
+### 1. Digital Clock Display (TM1637)
+- Displays real-time clock (HH:MM format)  
+- Time is synchronized using NTP via WiFi  
+- Runs continuously during system operation  
+
+### 2. Telegram Bot Output
+- System responds to user commands in real time  
+- Example outputs:
+  - Mode activation messages (Manual / Automatic)  
+  - Sensor data:
+    - Temperature (°C)  
+    - Humidity (%)  
+- Acts as main interface for control and monitoring  
+
+### 3. Serial Monitor Output
+- Used for debugging and system monitoring  
+- Displays:
+  - WiFi connection status  
+  - Incoming Telegram commands  
+  - LDR sensor readings  
+  - System mode changes (Manual / Automatic)  
+- Helps verify system behavior during development
+
+<!--- FUTURE IMPROVEMENTS --->
+## Future Improvements
+
+- Add mobile app or web dashboard for full control (not only clock setting)  
+- Implement data logging (temperature, humidity, light) to database or cloud  
+- Add notification system (e.g., alert when temperature too high or unusual activity)  
+- Improve security using Telegram chat ID filtering or authentication system  
+- Add more sensors (e.g., gas sensor, motion sensor, rain sensor)  
+- Upgrade display to LCD/OLED for richer information  
+- Implement manual override safety in Automatic Mode  
+- Optimize power management for long-term usage  
+
+<!--- CLOSING --->
+---
+<p align="center">
+  <i>"Without curiosity and experimentation, even the most complex system becomes inert."</i><br><br>
+  <i>This project is developed for educational purposes.</i><br>
+  <b>© 2026 Della Mila Yuniar</b>
+</p>
